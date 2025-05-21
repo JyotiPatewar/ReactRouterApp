@@ -91,7 +91,7 @@ function UserTable() {
                               <td>{user.status}</td>
                               <td>{user.description}</td>
                               <td>
-                                 <button onClick={() => editUserHandler(index)} style={{margin:"10px"}}>Edit</button>
+                                 <button onClick={() => editUserHandler(index)} style={{ margin: "10px" }}>Edit</button>
                                  <button onClick={() => deleteUser(index)}>Delete</button>
                               </td>
                            </tr>

@@ -240,7 +240,7 @@ function UserList() {
                   </>
                 ) : (
                   <>
-                    <button onClick={() => editUserHandlerr(index)} style={{margin:"10px"}}>Edit</button>
+                    <button onClick={() => editUserHandlerr(index)} style={{ margin: "10px" }}>Edit</button>
                     <button onClick={() => deleteUser(index)}>Delete</button>
                   </>
                 )}
