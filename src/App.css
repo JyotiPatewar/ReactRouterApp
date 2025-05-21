@@ -11,9 +11,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -22,6 +24,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -40,6 +43,7 @@
 .read-the-docs {
   color: #888;
 }
+
 .input-field {
   border: 1px solid #ccc;
   background-color: aliceblue;
@@ -51,7 +55,7 @@
 .submit-button {
   background-color: #4CAF50;
   color: white;
-  margin-top: 30px;
+  margin: 30px;
   width: 70%;
   padding: 8px 16px;
   border: none;
@@ -64,14 +68,16 @@
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
-  
-}
-table {
-  border-collapse: collapse;
-  width: 120%;
+
 }
 
-th, td {
+table {
+  border-collapse: collapse;
+  width: 160%;
+}
+
+th,
+td {
   text-align: left;
   padding: 8px;
 }
@@ -80,6 +86,7 @@ tr:nth-child(odd) {
   color: black;
   background-color: rgb(155, 149, 149);
 }
+
 tr:nth-child(even) {
   color: black;
   background-color: rgb(237, 214, 214);

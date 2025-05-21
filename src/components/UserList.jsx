@@ -1,11 +1,111 @@
-function UserList({userList,deleteUser,editUserHandlerr,editIndex,data,handleChange,hobbies,setHobbies,saveEdit,cancelEdit
-}) {
+import { useEffect, useState } from "react";
+function UserList() {
+
+  const [data, setData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    gender: "",
+    status: "",
+    description: ""
+  });
+  const [hobbies, sethobbies] = useState([]);
+  const [userList, setUserList] = useState([]);
+  const [editIndex, setEditIndex] = useState(null)
+  const [edituser, setEditUser] = useState(false)
+  const [toogle, setToogle] = useState(true)
+
+
+  const deleteUser = (index) => {
+    if (window.confirm("Do You Want To Delete It? Sure")) {
+      userList.splice(index, 1);
+      setUserList([...userList])
+      localStorage.setItem("data", JSON.stringify([...userList]));
+    }
+  }
+
+  useEffect(() => {
+    const savedUsers = JSON.parse(localStorage.getItem("data"));
+    if (savedUsers) {
+      setUserList(savedUsers);
+    }
+  }, []);
+
+  const editUserHandlerr = (index) => {
+    const selectedUser = userList[index];
+    console.log(selectedUser)
+    setData({
+      firstName: selectedUser.firstName,
+      lastName: selectedUser.lastName,
+      email: selectedUser.email,
+      gender: selectedUser.gender,
+      status: selectedUser.status,
+      description: selectedUser.description,
+    });
+    sethobbies(selectedUser.hobbies || []);
+    setEditUser(true);
+    setEditIndex(index);
+    setToogle(false)
+  };
+
+
+  const handleChange = (e) => {
+    let val = e.target.value.trim();
+    setData({ ...data, [e.target.name]: val })
+  }
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const finalData = { ...data, hobbies };
+
+    let updatedList = [...userList];
+
+    if (edituser && editIndex !== null) {
+      updatedList[editIndex] = finalData;
+    } else {
+      updatedList.push(finalData);
+    }
+
+    setUserList(updatedList);
+    localStorage.setItem("data", JSON.stringify(updatedList));
+
+    setData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      gender: "",
+      status: "",
+      description: "",
+    });
+    sethobbies([]);
+    setEditUser(false);
+    setEditIndex(null);
+  };
+
+
+  const cancelEdit = () => {
+    setEditIndex(null);
+    setData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      gender: "",
+      status: "",
+      description: "",
+    });
+    sethobbies([]);
+  }
+
+
+
+
   return (
     <div>
-        <h1>User List</h1>
-      <table style={{ border: "2px solid black", width: "100%", marginBlock: "100px" }}>
+      <h1>User List</h1>
+      <table style={{ border: "2px solid black", width: "100%", marginBlock: "10px" }}>
         <thead>
-          <tr>
+          <tr style={{ border: "2px solid black" }}>
             <th>No.</th>
             <th>FirstName</th>
             <th>LastName</th>
@@ -18,7 +118,11 @@ function UserList({userList,deleteUser,editUserHandlerr,editIndex,data,handleCha
           </tr>
         </thead>
         <tbody>
-          {userList.map((user, index) => (
+          {userList.length === 0 ? (
+            <tr>
+              <td colSpan="9" style={{ textAlign: "center" }}>No Record Found</td>
+            </tr>
+          ) : (userList.map((user, index) => (
             <tr key={index}>
               <td>{index + 1}</td>
               <td>
@@ -79,9 +183,9 @@ function UserList({userList,deleteUser,editUserHandlerr,editIndex,data,handleCha
                           onChange={(e) => {
                             const checked = e.target.checked;
                             if (checked) {
-                              setHobbies([...hobbies, hobby]);
+                              sethobbies([...hobbies, hobby]);
                             } else {
-                              setHobbies(hobbies.filter((h) => h !== hobby));
+                              sethobbies(hobbies.filter((h) => h !== hobby));
                             }
                           }}
                         />
@@ -131,22 +235,23 @@ function UserList({userList,deleteUser,editUserHandlerr,editIndex,data,handleCha
               <td>
                 {editIndex === index ? (
                   <>
-                    <button onClick={saveEdit}>Save</button>
+                    <button onClick={handleSubmit}>Save</button>
                     <button onClick={cancelEdit}>Cancel</button>
                   </>
                 ) : (
                   <>
-                    <button onClick={() => editUserHandlerr(index)}>Edit</button>
+                    <button onClick={() => editUserHandlerr(index)} style={{margin:"10px"}}>Edit</button>
                     <button onClick={() => deleteUser(index)}>Delete</button>
                   </>
                 )}
               </td>
             </tr>
-          ))}
+          )))}
         </tbody>
       </table>
     </div>
   );
 }
+
 
 export default UserList;

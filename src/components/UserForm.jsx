@@ -1,4 +1,90 @@
-function UserForm({handleSubmit,data,handleChange,handleChangeCheck,hobbies}){
+import { useNavigate,useLocation } from "react-router-dom";
+import { useState,useEffect } from "react";
+function UserForm(){
+  const navigate = useNavigate();
+  const location = useLocation();                                                       //hook contains object with url and state
+   const { userData, index, isEdit } = location.state || {}
+
+    const [data, setData] = useState({
+      firstName: "",
+      lastName: "",
+      email: "",
+      gender: "",
+      status: "",
+      description: ""
+    });
+    const [hobbies, sethobbies] = useState([]);
+    const [userList, setUserList] = useState([]);
+    const [edituser, setEditUser] = useState(false)
+    const [toogle, setToogle] = useState(true)
+  const [editIndex, setEditIndex] = useState(null)
+
+
+useEffect(() => {
+  if (isEdit && userData) {
+    setData({
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      email: userData.email,
+      gender: userData.gender,
+      status: userData.status,
+      description: userData.description,
+    });
+    sethobbies(userData.hobbies || []);
+    setEditUser(true);
+    setEditIndex(index);
+  }
+}, [isEdit, userData, index]);
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const finalData = { ...data, hobbies };
+
+   const savedUsers = JSON.parse(localStorage.getItem("data")) ;
+  let updatedList = [...savedUsers];
+
+    if (edituser && editIndex !== null) {
+      updatedList[editIndex] = finalData;
+    } else {
+      updatedList.push(finalData);
+    }
+
+    setUserList(updatedList);
+    localStorage.setItem("data", JSON.stringify(updatedList));
+
+    setData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      gender: "",
+      status: "",
+      description: "",
+    });
+    sethobbies([]);
+    setEditUser(false);
+    setEditIndex(null);
+    {toogle && navigate('/UserTable')};
+  };
+  
+  const handleChange = (e) => {
+    let val = e.target.value.trim();
+    setData({ ...data, [e.target.name]: val })
+  }
+
+  const handleChangeCheck = (e) => {
+    const checked = e.target.checked;
+    const value = e.target.value;
+    console.log(checked, value)
+    if (checked)
+      sethobbies([...hobbies, value]);
+    else
+      sethobbies(hobbies.filter((hobby) => {
+        console.log("hobby  : ", hobby)
+        return hobby !== value
+      }))
+  }
+
     return (
         <div>
         <form onSubmit={handleSubmit}>
